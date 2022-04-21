@@ -81,8 +81,7 @@ def build_decision_tree():
         The root node of the decision tree.
     """
     dt_root = None
-    # TODO: finish this.
-
+    
     l2_right = DecisionNode(None,None,lambda feature:feature[0] <= -0.16305)
     l2_right.left = DecisionNode(None,None,None,0)
     l2_right.right = DecisionNode(None,None,None,1)
@@ -128,9 +127,7 @@ def confusion_matrix(true_labels, classifier_output, n_classes=2):
     Returns:
         A two dimensional array representing the confusion matrix.
     """
-    c_matrix = None
-    # TODO: finish this.
-
+    
     c_matrix = np.zeros((n_classes,n_classes),dtype=np.uint64)
 
     for i in range(len(true_labels)):
@@ -155,8 +152,6 @@ def precision(true_labels, classifier_output, n_classes=2, pe_matrix=None):
         So if the classifier is (0,1,2,...,n), the output should be in the below format:
         [precision (0), precision(1), precision(2), ... precision(n)].
     """
-    # TODO: finish this.
-
     prec = np.zeros(n_classes)
 
     if pe_matrix:
@@ -191,7 +186,6 @@ def recall(true_labels, classifier_output, n_classes=2, pe_matrix=None):
         So if the classifier is (0,1,2,...,n), the output should be in the below format:
         [recall (0), recall (1), recall (2), ... recall (n)].
     """
-    # TODO: finish this.
 
     rec = np.zeros(n_classes)
 
@@ -225,7 +219,6 @@ def accuracy(true_labels, classifier_output, n_classes=2, pe_matrix=None):
     Returns:
         The accuracy of the classifier output.
     """
-    # TODO: finish this.
     true_labels = np.array(true_labels)
     classifier_output = np.array(classifier_output)
 
@@ -258,10 +251,7 @@ def gini_impurity(class_vector):
     Returns:
         Floating point number representing the gini impurity.
     """
-    # TODO: finish this.
-    # print(class_vector)
     class_vector = np.array(class_vector)
-    # return 1-np.sum(np.array([(len(class_vector[class_vector==i])/len(class_vector))**2 for i in np.unique(class_vector)]))
     _,counts = np.unique(class_vector,return_counts=True)
     return 1 - np.sum((counts/np.sum(counts))**2)
 
@@ -275,7 +265,6 @@ def gini_gain(previous_classes, current_classes):
     Returns:
         Floating point number representing the gini gain.
     """
-    # TODO: finish this.
 
     rem = sum(len(c)/len(previous_classes)*gini_impurity(c) for c in current_classes)
     return gini_impurity(previous_classes) - rem
@@ -312,14 +301,12 @@ class DecisionTree:
         Returns:
             Root node of decision tree.
         """
-        # TODO: finish this.
         features = np.array(features)
         classes = np.array(classes)
 
         # base case
         if depth == self.depth_limit or len(np.unique(classes)) <= 1 or len(classes) <= 1:
 
-            # print(np.unique(classes,return_counts=True))
             if len(classes) == 1 or len(np.unique(classes)) == 1:
                 return DecisionNode(None,None,None,classes[0])
 
@@ -327,7 +314,7 @@ class DecisionTree:
                 unique,counts = np.unique(p_classes,return_counts=True)
                 return DecisionNode(None,None,None,unique[counts.argmax()])
 
-            else: # if depth == self.depth_limit
+            else:
                 if len(classes) > 0:
                     unique,counts = np.unique(classes,return_counts=True)
                 else: # when class vector empty
@@ -341,7 +328,6 @@ class DecisionTree:
         left_tree = self.__build_tree__(left[:,:-1],left[:,-1],p_classes=classes,depth=depth+1)
         right_tree = self.__build_tree__(right[:,:-1],right[:,-1],p_classes=classes,depth=depth+1)
 
-        # print(features.shape)
         return DecisionNode(left_tree,right_tree,lambda features:features[alpha_best]<=thresh,None)
 
     def get_split(self,features,classes,rf_prob):
@@ -362,7 +348,6 @@ class DecisionTree:
         else:
             vals = range(features.shape[1])
 
-        # COULD VECTORIZE THIS FOR LOOP. IF HAVE TIME, COME BACK TO THIS
         for i in vals:
 
             mean = features[:,i].mean()
@@ -393,7 +378,6 @@ class DecisionTree:
         Return:
             A list of class labels.
         """
-        # TODO: finish this.
 
         class_labels = [self.root.decide(f) for f in features]
 
@@ -413,7 +397,6 @@ def generate_k_folds(dataset, k):
         => Each fold is a tuple of sets.
         => Each Set is a tuple of numpy arrays.
     """
-    # TODO: finish this.
 
     features, classes = dataset
     classes = classes[:,None]
@@ -466,7 +449,6 @@ class RandomForest:
             features (m x n): m examples with n features.
             classes (m x 1): Array of Classes.
         """
-        # TODO: finish this.
 
         features = np.array(features)
         classes = np.array(classes)
@@ -487,72 +469,16 @@ class RandomForest:
         Returns:
             votes (list(int)): m votes for each element
         """
-        # TODO: finish this.
 
-        # print(features[:10].shape)
         votes = np.zeros(len(features))
-        # print(votes.shape)
-        # print(len(self.trees))
         all_votes = np.array([t.classify(features) for t in self.trees])
-        # print(all_votes.shape)
         all_votes = all_votes.T
-        # print(all_votes.shape)
-        # print(all_votes[0])
-        # print(np.unique(all_votes[0],return_counts=True))
-        # print(votes.shape,all_votes.shape)
-        # print(all_votes,'\n--------------------\n')
+
         for i,v in enumerate(all_votes):
             unique,counts = np.unique(v,return_counts=True)
-            # print(all_votes[i])
-            # print(unique,counts)
             votes[i] = unique[counts.argmax()]
-        # print(votes)
-        # exit()
+
         return list(votes)
-
-
-class ChallengeClassifier:
-    """Challenge Classifier used on Challenge Training Data."""
-
-    def __init__(self, n_clf=0, depth_limit=0, example_subsample_rt=0.0, \
-                 attr_subsample_rt=0.0, max_boost_cycles=0):
-        """Create a boosting class which uses decision trees.
-        Initialize and/or add whatever parameters you may need here.
-        Args:
-             num_clf (int): fixed number of classifiers.
-             depth_limit (int): max depth limit of tree.
-             attr_subsample_rate (float): percentage of attribute samples.
-             example_subsample_rate (float): percentage of example samples.
-        """
-        self.num_clf = n_clf
-        self.depth_limit = depth_limit
-        self.example_subsample_rt = example_subsample_rt
-        self.attr_subsample_rt=attr_subsample_rt
-        self.max_boost_cycles = max_boost_cycles
-        # TODO: finish this.
-        raise NotImplemented()
-
-    def fit(self, features, classes):
-        """Build the boosting functions classifiers.
-            Fit your model to the provided features.
-        Args:
-            features (m x n): m examples with n features.
-            classes (m x 1): Array of Classes.
-        """
-        # TODO: finish this.
-        raise NotImplemented()
-
-    def classify(self, features):
-        """Classify a list of features.
-        Predict the labels for each feature in features to its corresponding class
-        Args:
-            features (m x n): m examples with n features.
-        Returns:
-            A list of class labels.
-        """
-        # TODO: finish this.
-        raise NotImplemented()
-
 
 class Vectorization:
     """Vectorization preparation for Assignment 5."""
@@ -586,7 +512,6 @@ class Vectorization:
         Returns:
             Numpy array of data.
         """
-        # TODO: finish this.
 
         data = np.array(data)
 
@@ -625,7 +550,6 @@ class Vectorization:
         Returns:
             Tuple (Max row sum, index of row with max sum)
         """
-        # TODO: finish this.
 
         data = np.array(data)
 
@@ -664,7 +588,6 @@ class Vectorization:
         Returns:
             Dictionary [(integer, number of occurrences), ...]
         """
-        # TODO: finish this.
         vals,count = np.unique(data[data>0],return_counts=True)
         return dict(zip(vals,count)).items()
 
@@ -752,10 +675,3 @@ class Vectorization:
         vectorized[data<threshold] = data[data<threshold]**2
 
         return vectorized
-
-
-def return_your_name():
-    # return your name
-    # TODO: finish this
-
-    return 'David Wolfson'
