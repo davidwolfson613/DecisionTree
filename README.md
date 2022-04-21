@@ -5,3 +5,7 @@ This is a cool school project I worked on. I created decision tree classifiers f
 This repo can be cloned locally and run by typing this command into the command line:
 
     python decision_tree.py
+    
+In order to install all the required packages, run the following command from the command line:
+
+    pip install -r requirements.txt
