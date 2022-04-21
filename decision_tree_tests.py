@@ -5,7 +5,7 @@ import numpy as np
 import time
 
 
-class DecisionTreePart1Tests(unittest.TestCase):
+class DecisionTreeClassificationTests(unittest.TestCase):
     """Test tree example, confusion matrix, precision, recall, and accuracy.
 
     Attributes:
@@ -140,7 +140,7 @@ class DecisionTreePart1Tests(unittest.TestCase):
         assert round(0.25, 3) == round(dt.accuracy(true_label, answer, n_classes), 3)
 
 
-class DecisionTreePart2Tests(unittest.TestCase):
+class DecisionTreeLearningTests(unittest.TestCase):
     """Tests for Decision Tree Learning.
 
     Attributes:
@@ -304,7 +304,7 @@ class DecisionTreePart2Tests(unittest.TestCase):
 
 
 
-class DecisionTreePart3Tests(unittest.TestCase):
+class RandomForestLearningTests(unittest.TestCase):
     """Tests for RandomForest Decision Tree Learning.
 
     Attributes:
@@ -362,7 +362,7 @@ class DecisionTreePart3Tests(unittest.TestCase):
         assert sum(results) / 10. >= .80
 
 
-class DecisionTreePart4Tests(unittest.TestCase):
+class BoostDTLearningTests(unittest.TestCase):
     """Tests for Boost Decision Tree Learning.
 
     Attributes:
@@ -418,7 +418,7 @@ class DecisionTreePart4Tests(unittest.TestCase):
         assert sum(results) / 10. >= .80
 
 
-class VectorizationWarmUpTests(unittest.TestCase):
+class VectorizationTests(unittest.TestCase):
     """Tests the Warm Up exercises for Vectorization.
 
     Attributes:
